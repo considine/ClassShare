@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    tools:context="com.example.johnpconsidine.snapjack.LoginActivity"
+    android:background="@drawable/bg_gradient">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text= "@string/app_title"
+        android:textSize="30sp"
+        android:textColor="#ffffff"
+        android:id="@+id/textView"
+        style="@style/AudioFileInfoOverlayText"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/classshare_title_margin"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/usernameText"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/edittextstyle"
+        android:layout_marginTop="155dp"
+        android:hint="@string/username_hint"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/passwordText"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_marginTop="@dimen/input_marginTop"
+        android:layout_below="@id/usernameText"
+        android:background="@drawable/edittextstyle"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/password_hint"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login!"
+        android:layout_marginTop="@dimen/input_marginTop"
+        android:background="@drawable/mybutton"
+        android:id="@+id/loginButton"
+        android:layout_below="@+id/passwordText"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/signup_info"
+        android:id="@+id/signupText"
+        android:layout_below="@+id/loginButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"/>
+
+
+</RelativeLayout>

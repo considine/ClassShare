@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:paddingLeft="@dimen/layout_padding"
+             android:paddingRight="@dimen/layout_padding"
+             android:layout_width="match_parent"
+             android:background="@drawable/bg_gradient"
+             android:layout_height="match_parent"
+             tools:context="com.example.johnpconsidine.classshare.Fragments.GroupsFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/new_group"
+        android:id="@+id/addGroupButton"
+        android:background="@drawable/mybutton"
+        android:src="@drawable/ic_group_add_black_24dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_group_text"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/addGroupButton"
+        android:id="@+id/addGroupText"
+        style="@style/AudioFileInfoOverlayText"
+        android:textSize="25sp"/>
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textSize="30sp"
+        android:layout_marginTop="@dimen/empty_margin"
+        android:layout_below="@id/addGroupText"
+        style="@style/AudioFileInfoOverlayText"
+        android:text="@string/no_groups" />
+
+
+
+    <ListView
+        android:layout_below="@+id/addGroupText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@android:id/list"
+        android:layout_gravity="center_horizontal|top">
+
+    </ListView>
+
+</RelativeLayout>

@@ -1,0 +1,45 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@drawable/bg_gradient"
+             tools:context="com.example.johnpconsidine.classshare.Fragments.ChooseMembersFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/create_group_text"
+        android:id="@+id/createGroupButton"
+        android:background="@drawable/mybutton"
+        android:src="@drawable/ic_plus_one_black_24dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/createGroupButton"
+        android:paddingBottom="@dimen/input_height"
+        android:text="@string/which_users"
+        style="@style/AudioFileInfoOverlayText"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/userText"
+        android:textSize="15sp"/>
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/AudioFileInfoOverlayText"
+        android:textSize="30sp"
+        android:layout_marginTop="@dimen/empty_margin"
+        android:layout_below="@id/userText"
+        android:text="@string/no_students" />
+
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@android:id/list"
+        android:layout_below="@id/userText">
+
+    </ListView>
+
+</RelativeLayout>

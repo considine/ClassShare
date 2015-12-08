@@ -1,0 +1,27 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@drawable/bg_gradient"
+             tools:context="com.example.johnpconsidine.classshare.Fragments.ChooseClassFragment">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/which_class"
+        android:layout_centerHorizontal="true"
+        style="@style/AudioFileInfoOverlayText"
+        android:id="@+id/classText"
+        android:textSize="20sp"/>
+    <ListView
+        android:layout_below="@id/classText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@android:id/list"
+        android:layout_centerHorizontal="true"
+        android:divider="@drawable/list_divider">
+
+    </ListView>
+
+</RelativeLayout>

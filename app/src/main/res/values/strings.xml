@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">ClassShare</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Login</string>
+    <string name="username_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="app_title">ClassShare</string>
+    <string name="signup_info">Signup here.</string>
+    <string name="title_activity_signup">SignupActivity</string>
+    <string name="email_address">Email Address</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="signup">Signup for ClassInfoShare</string>
+    <string name="first_name">  First Name</string>
+    <string name="last_name">   Last Name</string>
+    <string name="create_account">Create Account</string>
+    <string name="empty_fields_error">All fields are required to make an account</string>
+    <string name="general_error_title">Oops</string>
+    <string name="unmatch_error"> Passwords do not match</string>
+    <string name="short_error">Password must be 6 letters long</string>
+    <string name="group">My Groups</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <array name="test">
+        <item>Group1</item>
+        <item>Group2</item>
+        <item>Group3</item>
+    </array>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_group">New Group</string>
+    <string name="add_class">Add a Course</string>
+    <string name="logout">Logout</string>
+    <string name="create_class">Enter your class, with no spaces (XXX-######)</string>
+    <string name="invalid_name">Invalid class name</string>
+    <string name="exists">That class already exits!</string>
+    <string name="create_group_text">Create a group!</string>
+    <string name="which_class">For which class will this group be</string>
+    <string name="which_users">Which Users would you like to add to the group?</string>
+    <string name="no_students">There are no other students in this class yet</string>
+    <string name="no_groups">You are not a member of any group- Click the button to create one</string>
+    <string name="no_groupmembers">Please select some Group Members!</string>
+    <string name="please_create_group">Please enter a group name to finish creating this group</string>
+    <string name="no_group_name">Group name must be atleast a character</string>
+    <string name="already_exists">This group already exists</string>
+    <string name="icon">Icon</string>
+    <string name="enter_message">Enter Message</string>
+    <string name="send_message">send mesasge</string>
+</resources>

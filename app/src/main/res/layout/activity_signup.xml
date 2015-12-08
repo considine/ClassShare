@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+
+    android:paddingLeft="32dp"
+    android:paddingRight="32dp"
+    tools:context="com.example.johnpconsidine.snapjack.SignupActivity"
+    android:background="@drawable/bg_gradient">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text= "@string/app_title"
+        android:textSize="30sp"
+        android:textColor="#ffffff"
+        android:id="@+id/classshareText"
+        style="@style/AudioFileInfoOverlayText"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/classshare_title_margin"
+        android:layout_centerHorizontal="true"/>
+    <FrameLayout
+        android:layout_width="@dimen/input_width"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/classshareText"
+        android:layout_marginTop="@dimen/classshare_title_margin"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/frameLayout">
+        <EditText
+            android:layout_width="@dimen/name_width"
+            android:layout_height="@dimen/input_height"
+            android:inputType="textCapSentences"
+            android:hint="@string/first_name"
+            android:ems="10"
+            android:ellipsize="start"
+            android:gravity="center_horizontal|center_vertical"
+            android:id="@+id/firstnameText"
+            android:background="@drawable/edittextstyle"
+            android:textSize="@dimen/input_text_size"
+            />
+
+        <EditText
+            android:layout_width="@dimen/name_width"
+            android:layout_height="@dimen/input_height"
+            android:hint="@string/last_name"
+            android:ems="10"
+            android:ellipsize="start"
+            android:inputType="textCapSentences"
+            android:gravity="center_horizontal|center_vertical"
+            android:id="@+id/lastnameText"
+            android:layout_gravity="end"
+            android:background="@drawable/edittextstyle"
+            android:textSize="@dimen/input_text_size"/>
+    </FrameLayout>
+
+    <EditText
+        android:layout_width="@dimen/input_width"
+        android:layout_height="@dimen/input_height"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/emailText"
+        android:layout_below="@+id/frameLayout"
+        android:layout_alignRight="@+id/frameLayout"
+        android:layout_alignEnd="@+id/frameLayout"
+        android:hint="@string/email_address"
+        android:layout_marginTop="@dimen/input_marginTop"
+        android:ellipsize="start"
+        android:gravity="center_horizontal|center_vertical"
+        android:textSize="@dimen/input_text_size"
+        android:background="@drawable/edittextstyle"/>
+
+    <EditText
+        android:layout_width="@dimen/input_width"
+        android:layout_height="@dimen/input_height"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/passwordText"
+        android:layout_below="@+id/emailText"
+        android:layout_alignRight="@+id/emailText"
+        android:layout_alignEnd="@+id/emailText"
+        android:hint="@string/password_hint"
+        android:layout_marginTop="@dimen/input_marginTop"
+        android:ellipsize="start"
+        android:gravity="center_horizontal|center_vertical"
+        android:textSize="@dimen/input_text_size"
+        android:background="@drawable/edittextstyle"/>
+
+    <EditText
+        android:layout_width="@dimen/input_width"
+        android:layout_height="@dimen/input_height"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/confirmText"
+        android:layout_below="@+id/passwordText"
+        android:layout_alignRight="@+id/passwordText"
+        android:layout_alignEnd="@+id/passwordText"
+        android:hint="@string/confirm_password"
+        android:layout_marginTop="@dimen/input_marginTop"
+        android:ellipsize="start"
+        android:gravity="center_horizontal|center_vertical"
+        android:textSize="@dimen/input_text_size"
+        android:background="@drawable/edittextstyle"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/input_marginTop"
+        android:text="@string/create_account"
+        android:id="@+id/signupButton"
+        android:layout_below="@+id/confirmText"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/mybutton"
+        />
+
+
+</RelativeLayout>

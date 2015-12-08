@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+                android:background="@drawable/bg_gradient"
+             android:id="@+id/layout"
+             tools:context="com.example.johnpconsidine.classshare.Fragments.MessageFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@android:id/list"
+        android:background="#ffffff"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/relativeLayout"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/relativeLayout"
+        android:background="@drawable/bg_gradient"
+        >
+
+            <EditText
+                android:inputType="textCapSentences"
+                android:hint="@string/enter_message"
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:layout_alignBottom="@+id/sendButton"
+                android:layout_height="match_parent"
+                android:id="@+id/messageText"
+                android:layout_gravity="center_horizontal|bottom"
+                android:layout_toLeftOf="@+id/sendButton"
+                android:layout_toStartOf="@+id/sendButton"/>
+
+            <ImageButton
+                android:contentDescription="@string/send_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/sendButton"
+                android:src="@drawable/ic_action_send_now"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
+
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
