@@ -18,14 +18,18 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.johnpconsidine.classshare.Adapters.NavDrawerAdapter;
+import com.example.johnpconsidine.classshare.Fragments.BrowseClasses;
 import com.example.johnpconsidine.classshare.Fragments.ChooseClassFragment;
 import com.example.johnpconsidine.classshare.Fragments.ChooseMembersFragment;
+import com.example.johnpconsidine.classshare.Fragments.GroupsByClass;
 import com.example.johnpconsidine.classshare.Fragments.GroupsFragment;
 import com.example.johnpconsidine.classshare.Fragments.MessageFragment;
 import com.example.johnpconsidine.classshare.ParseClasses.ClassRoom;
+import com.example.johnpconsidine.classshare.ParseClasses.Group;
 import com.example.johnpconsidine.classshare.ParseClasses.ParseConstants;
 import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
@@ -36,15 +40,37 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
+    private TextView toolbarText;
     public final static String TAG = MainActivity.class.getSimpleName();
     private DrawerLayout mDrawerLayout;
     private ListView mNavList;
     private List<String> mItems;
+    private String[][] requestPairs;
+
+    public List<String> getClasses() {
+        return mClasses;
+    }
+
+
+    public void setClasses(List<String> classes) {
+        mClasses = classes;
+    }
+
     private List<String> mClasses;
+    public List<String> getUnapprovedGroups() {
+        return mUnapprovedGroups;
+    }
+
+    public void setUnapprovedGroups(List<String> unapprovedGroups) {
+        mUnapprovedGroups = unapprovedGroups;
+    }
+
+    private List<String> mUnapprovedGroups;
 
     private String currentUsername;
     public String getCurrentUsername() {
@@ -71,13 +97,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private List<String> mGroups;
 
-    public ImageView getCreateImage() {
-        return createImage;
+    public void setJustGroups(List<String> justGroups) {
+        this.justGroups = justGroups;
+    }
+
+    private List<String> justGroups;
+
+    public ImageView getNotifications() {
+        return notifications;
     }
 
 
 
-    public ImageView createImage;
+    public ImageView notifications;
     public String getCurrentClass() {
         return currentClass;
     }
@@ -119,23 +151,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             currentUsername = currentUser.getUsername();
         }
         mNavList = (ListView) findViewById(R.id.navdrawerList);
-        mGroups = new ArrayList<>();
         currentGroupMembers = new ArrayList<>();
+        toolbarText = (TextView) findViewById(R.id.toolbarTitle);
 
+        notifications = (ImageView) findViewById(R.id.createGroup);
+        notifications.setVisibility(View.GONE);
 
-        createImage = (ImageView) findViewById(R.id.createGroup);
-        createImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addingFragment(2);
-            }
-        });
-        createImage.setVisibility(View.GONE);
         //initialize items: mItems is all items in nav drawer. mClasses is all classes
         mItems = new ArrayList<>();
         mClasses = new ArrayList<>();
+        mGroups = new ArrayList<>();
+        justGroups = new ArrayList<>();
         currentClass = null; //this is for adding students to your group
-
+        queryNotifications();
         //query for classes that this user is in
         //todo: You are not connected to the internet
         ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_OBJECT);
@@ -201,6 +229,88 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     }
 
+    public void queryNotifications() {
+        Log.v(TAG, "code4" + mGroups.size());
+
+        for (String group : mGroups) {
+            Log.v(TAG, "The group is " + group );
+        }
+        ParseQuery<Group> query = new ParseQuery<Group>(ParseConstants.GROUP_OBJECT);
+        query.whereEqualTo(ParseConstants.APPROVED, false); //not yet approved
+        query.whereContainedIn(ParseConstants.GROUP_NAME, justGroups);
+        query.findInBackground(new FindCallback<Group>() {
+            @Override
+            public void done(List<Group> objects, ParseException e) {
+                if (e==null) {
+                    requestPairs = new String[3][objects.size()];
+                    int i =0;
+                    for (Group object : objects) {
+                        requestPairs[0][i] = object.getMember();
+                        requestPairs[1][i] = object.getGroupName();
+                        requestPairs[2][i] = object.getNameOfClass();
+                        i++;
+                        object.deleteInBackground();
+                    }
+                    if (objects.size() > 0) {
+                        notifications.setVisibility(View.VISIBLE);
+                        notifications.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                notifications.setVisibility(View.GONE);
+                                setNotifications(); // shows notification icon only when we have any!
+                            }
+                        });
+                    }
+
+                }
+                else {
+                    Log.e(TAG, "error getting notifications ");
+                }
+            }
+        });
+
+
+
+    }
+
+    private void setNotifications() {
+        int i =0;
+        for (String groupname : requestPairs[0]) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            final String tempGroupname = requestPairs[1][i];
+            final String tempUsername = requestPairs[0][i];
+            final String tempClassname = requestPairs[2][i];
+            builder.setTitle(R.string.add_to_group);
+            builder.setMessage(tempUsername + " would like to join " + tempGroupname);
+            builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Group group = new Group();
+                    group.setGroupName(tempGroupname);
+                    group.setMembers(tempUsername);
+                    group.setNameOfClass(tempClassname);
+                    group.setApproved(true);
+                    group.setCreator(getString(R.string.already_created_group));
+                    group.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e != null) {
+                                Log.e(TAG, "error adding new group member! ");
+                            }
+                        }
+                    });
+                }
+            });
+            builder.setNegativeButton("Ignore", null);
+            builder.show();
+
+            i++;
+
+        }
+        requestPairs = new String[3][10]; //just to delete the amount
+    }
+
+
     public void addingFragment(int which) {
 
         //make sure the keyboard is down
@@ -213,6 +323,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         ChooseMembersFragment mChooseMembersFragment = new ChooseMembersFragment();
         MessageFragment mMessageFragment = new MessageFragment();
         ChooseClassFragment chooseClassFragment = new ChooseClassFragment();
+        GroupsByClass groupsByClass = new GroupsByClass();;
+        BrowseClasses browseClasses = new BrowseClasses();
         switch (which) {
             case (0):
                 mFragmentTransaction.add(R.id.fragmentHolder, mGroupsFragment);
@@ -265,8 +377,66 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 mFragmentTransaction.replace(R.id.fragmentHolder, mMessageFragment);
 
                 break;
+            case(5):
+                mToolbar.setNavigationIcon(R.drawable.ic_fast_rewind_black_24dp);
+                mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addingFragment(3);
+                    }
+                });
+
+                //query unapproved groups:
+                mFragmentTransaction.replace(R.id.fragmentHolder, groupsByClass);
+                break;
+            case(6):
+                mToolbar.setNavigationIcon(R.drawable.ic_fast_rewind_black_24dp);
+                mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        addingFragment(3);
+                    }
+                });
+
+                //query unapproved groups:
+                mFragmentTransaction.replace(R.id.fragmentHolder, browseClasses);
         }
         mFragmentTransaction.commit();
+
+    }
+
+    public void queryUnapproved() {
+        mUnapprovedGroups = new ArrayList<>();
+        ParseQuery<Group> query = new ParseQuery<Group>(ParseConstants.GROUP_OBJECT);
+        query.whereEqualTo(ParseConstants.USERS, currentUsername);
+        query.findInBackground(new FindCallback<Group>() {
+            @Override
+            public void done(List<Group> objects, ParseException e) {
+                if (e == null) {
+                    HashSet<String> tempClass = new HashSet<String>();
+
+                    for (Group group : objects) {
+                        tempClass.add(group.getGroupName());
+                    }
+                    Log.v(TAG, "The size of objects is: " + objects.size());
+                    Log.v(TAG, "The size of tempClass is: " + tempClass.size());
+
+                    String tempArrayClass[] = new String[tempClass.size()];
+                    tempClass.toArray(tempArrayClass);
+                    for (int i = 0; i < tempArrayClass.length; i++) {
+                        mUnapprovedGroups.add(tempArrayClass[i]);
+                    }
+                    Log.v(TAG, "The size of mUnapprobed here i:s " + mUnapprovedGroups.size());
+
+                    //now we have mUnapproved Groups, go to next fragment
+
+
+                    addingFragment(5);
+                } else {
+                    Log.e(TAG, "The error was querying unapproved: " + e.getMessage());
+                }
+            }
+        });
 
     }
 
@@ -275,10 +445,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Log.v(TAG, currentClass);
         addingFragment(1);
     }
-    private void setDrawer() {
+    public void setDrawer() {
 
         mItems.clear();
+        mItems.add(currentUsername);
         mItems.add(getString(R.string.add_class)); // option to add a class
+        mItems.add(getString(R.string.search_class));
         for (int i = 0; i < mClasses.size(); i++) {
             mItems.add(mClasses.get(i));
         }
@@ -310,7 +482,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        mDrawerLayout.closeDrawers();
         if (position == 0) {
+            //ido nothing
+        }
+        else if (position == 1) {
+
             // the case that the user has selected "Add a class"
             //create Dialog that takes an input
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -368,11 +545,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         }
 
-        if (position == 1) { //todo change to drawersize
+        else if (position == 2) {
+            //Search for clas
+            addingFragment(6);
+            Log.v(TAG, "search for classses");
+        }
+        else if (position == mItems.size()-1) { //todo change to drawersize
             ParseUser.logOut();
             navigateToLogin();
         }
+        else {
+            currentClass = mItems.get(position);
+            queryUnapproved();
+
+        }
+
     }
+
 
     private void errorCreate(DialogInterface dialog) {
         Toast.makeText(MainActivity.this, R.string.invalid_name, Toast.LENGTH_LONG).show();
@@ -445,6 +634,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
-
+    public void toolbarChange (String newName) {
+        if (toolbarText != null) {
+            toolbarText.setText(newName);
+        }
+    }
 
 }

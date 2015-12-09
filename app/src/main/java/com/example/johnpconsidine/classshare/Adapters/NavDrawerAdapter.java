@@ -1,7 +1,9 @@
 package com.example.johnpconsidine.classshare.Adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +46,7 @@ public class NavDrawerAdapter extends BaseAdapter {
     }
 
     public View getView (int position, View convertView, ViewGroup parent) {
+
         ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.navdrawer_item, null);
@@ -58,9 +61,16 @@ public class NavDrawerAdapter extends BaseAdapter {
         }
 
         holder.navText.setText(mMenuItems.get(position));
-        Log.v("jhi", mMenuItems.get(position));
         if (position == 0) {
+            holder.navIcon.setVisibility(View.GONE);
+            holder.navText.setGravity(Gravity.START);
+            holder.navText.setTextColor(ContextCompat.getColor(mContext, R.color.highlighted));
+        }
+        else if (position == 1) {
             holder.navIcon.setImageResource(R.drawable.ic_plus_one_black_24dp);
+        }
+        else if (position ==2) {
+            holder.navIcon.setImageResource(R.drawable.ic_visibility_black_24dp);
         }
         else if (position == getCount()-1) {
             holder.navIcon.setImageResource(R.drawable.ic_power_settings_new_black_24dp);

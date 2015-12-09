@@ -20,6 +20,8 @@ public class ParseConstants {
     //Group
     public static final String GROUP_NAME = "groupname";
     public static final String APPROVED = "approved";
+    public static final String CREATOR = "creator";
+
 
     // username password etc
     public static final String USERNAME = "username";

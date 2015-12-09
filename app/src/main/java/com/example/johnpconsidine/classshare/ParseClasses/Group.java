@@ -11,6 +11,9 @@ import com.parse.ParseObject;
 public class Group extends ParseObject {
     //unique group for every class-> group relationship
 
+    public void setCreator(String creator) { put(ParseConstants.CREATOR, creator);}
+    public String getCreator() {return getString(ParseConstants.CREATOR);}
+
     public String getMember() { return getString(ParseConstants.USERS);}
     public void setMembers(String member) { put(ParseConstants.USERS, member);} //only called at the creation of a group
 

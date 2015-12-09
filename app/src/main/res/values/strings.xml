@@ -29,7 +29,7 @@
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="new_group">New Group</string>
-    <string name="add_class">Add a Course</string>
+    <string name="add_class">Create a Course</string>
     <string name="logout">Logout</string>
     <string name="create_class">Enter your class, with no spaces (XXX-######)</string>
     <string name="invalid_name">Invalid class name</string>
@@ -46,4 +46,10 @@
     <string name="icon">Icon</string>
     <string name="enter_message">Enter Message</string>
     <string name="send_message">send mesasge</string>
+    <string name="my_groups">My Groups</string>
+    <string name="search_class">Browse Courses</string>
+    <string name="add_to_group">Add to group?</string>
+    <string name="already_created_group">alreadyCreated</string>
+    <string name="tap_course">Tap a course to add it to your curriculum</string>
+    <string name="set_courses">Set new Courses</string>
 </resources>

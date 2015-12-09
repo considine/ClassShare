@@ -22,14 +22,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:id="@+id/relativeLayout"
-        android:background="@drawable/bg_gradient"
+        android:background="#ffffff"
         >
 
             <EditText
                 android:inputType="textCapSentences"
                 android:hint="@string/enter_message"
                 android:layout_width="match_parent"
-                android:background="#ffffff"
                 android:layout_alignBottom="@+id/sendButton"
                 android:layout_height="match_parent"
                 android:id="@+id/messageText"

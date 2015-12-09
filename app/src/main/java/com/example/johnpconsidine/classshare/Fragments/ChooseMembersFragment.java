@@ -52,9 +52,7 @@ public class ChooseMembersFragment extends ListFragment implements AdapterView.O
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mGroupMembers = new ArrayList<>();
-        currentClass = ((MainActivity)getActivity()).getCurrentClass(); //sets the class we're talking
-
-        getActivity().setProgressBarIndeterminateVisibility(true);
+        currentClass = ((MainActivity)getActivity()).getCurrentClass(); //sets the class we're talkin
         ParseQuery<ClassRoom> query = new ParseQuery<ClassRoom>(ParseConstants.CLASS_OBJECT);
         query.whereEqualTo(ParseConstants.CLASS_NAME, currentClass);
         query.whereNotEqualTo(ParseConstants.USERNAME, ParseUser.getCurrentUser().getUsername());
@@ -91,7 +89,7 @@ public class ChooseMembersFragment extends ListFragment implements AdapterView.O
         View rootview = inflater.inflate(R.layout.fragment_choose, container, false);
         mButton = (ImageButton) rootview.findViewById(R.id.createGroupButton);
         mButton.setOnClickListener(this);
-        ImageView imageView = ((MainActivity) getActivity()).getCreateImage();
+        ImageView imageView = ((MainActivity) getActivity()).getNotifications();
         imageView.setOnClickListener(this);
 
         return rootview;
@@ -175,6 +173,7 @@ public class ChooseMembersFragment extends ListFragment implements AdapterView.O
                         group.setNameOfClass(currentClass);
                         group.setGroupName(groupName);
                         group.setApproved(true);
+                        group.setCreator(((MainActivity)getActivity()).getCurrentUsername());
                         group.saveInBackground(new SaveCallback() {
                             @Override
                             public void done(ParseException e) {

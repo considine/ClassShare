@@ -1,17 +1,15 @@
 package com.example.johnpconsidine.classshare.Fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.example.johnpconsidine.classshare.Adapters.MessageAdapter;
 import com.example.johnpconsidine.classshare.MainActivity;
@@ -59,6 +57,7 @@ public class MessageFragment extends ListFragment implements View.OnClickListene
         View rootview = inflater.inflate(R.layout.fragment_message, container, false);
         mMessage = (EditText) rootview.findViewById(R.id.messageText);
         CurrentGroup = ((MainActivity) getActivity()).getCurrentGroup();
+        ((MainActivity)getActivity()).toolbarChange(CurrentGroup);
         return rootview;
     }
 
@@ -75,7 +74,15 @@ public class MessageFragment extends ListFragment implements View.OnClickListene
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        ImageView mainImage = ((MainActivity)getActivity()).getNotifications();
+        mainImage.setImageResource(R.drawable.ic_settings_black_24dp);
+        mainImage.setVisibility(View.VISIBLE);
+        mainImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
 
 
 

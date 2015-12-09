@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -64,6 +65,9 @@ public class Login extends AppCompatActivity {
                                 Intent intent = new Intent (Login.this, MainActivity.class);
                                 intent.putExtra("CurrentUser", username);
                                 startActivity(intent);
+                            }
+                            else {
+                                Toast.makeText(Login.this, "Error Logging in: " + e.getMessage(), Toast.LENGTH_LONG).show();
                             }
 
 

@@ -12,4 +12,6 @@
     <dimen name="group_item_spacing">30dp</dimen>
     <dimen name="empty_margin">100dp</dimen>
     <dimen name="layout_padding">10dp</dimen>
+    <dimen name="message_length">300dp</dimen>
+    <dimen name="relative_padding">7dp</dimen>
 </resources>

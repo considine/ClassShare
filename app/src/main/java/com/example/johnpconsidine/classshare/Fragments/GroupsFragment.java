@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.johnpconsidine.classshare.Adapters.GroupAdapter;
 import com.example.johnpconsidine.classshare.MainActivity;
@@ -25,6 +27,9 @@ import java.util.List;
 public class GroupsFragment extends ListFragment implements View.OnClickListener{
     public static final String TAG = GroupsFragment.class.getSimpleName();
     ImageButton mButton;
+    ListView mListView;
+    TextView mText;
+    public ProgressBar progressbar;
     private List<Group> mGroups;
     private List<String> sGroups;
     private String[][] groupClass; //2 dimensional arrays of groups and classes in one, this
@@ -39,11 +44,13 @@ public class GroupsFragment extends ListFragment implements View.OnClickListener
         //todo rootview
 
     }
-
+    //before create view, we want the groups loaded, then we can create view
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((MainActivity)getActivity()).toolbarChange(getString(R.string.my_groups));
         sGroups = new ArrayList<>();
+
 
     }
 
@@ -56,42 +63,63 @@ public class GroupsFragment extends ListFragment implements View.OnClickListener
     @Override
     public void onResume() {
      super.onResume();
-        ParseQuery<Group> query = new ParseQuery<Group>(ParseConstants.GROUP_OBJECT);
-        query.whereEqualTo(ParseConstants.USERS, ((MainActivity)getActivity()).getCurrentUsername());
-        query.whereEqualTo(ParseConstants.APPROVED, true);
-        query.setLimit(1000);
-        query.findInBackground(new FindCallback<Group>() {
-            @Override
-            public void done(List<Group> objects, ParseException e) {
-                if (e == null) {
-                    mGroups = objects;
-                    groupClass = new String[objects.size()][2];
-                    sGroups = new ArrayList<String>();
-                    Log.v(TAG, objects.size() + "The size of these groups ");
+        if (getView() != null) {
+            progressbar = (ProgressBar) getView().findViewById(R.id.progressBar);
+            mListView = (ListView) getListView();
+            mText = (TextView) getView().findViewById(R.id.emptyText);
+            //set visibilities
+            progressbar.setVisibility(View.VISIBLE);
+            mListView.setVisibility(View.GONE);
+            mText.setVisibility(View.GONE);
 
-                    //remove duplicates
-                    for (int i = 0; i < mGroups.size(); i++) {
-                        sGroups.add(mGroups.get(i).getGroupName() + "-" + mGroups.get(i).getNameOfClass());
-                        groupClass[i][0] = mGroups.get(i).getGroupName();
-                        groupClass[i][1] = mGroups.get(i).getNameOfClass();
-                        Log.v(TAG, "hi");
-                    }
-                    ((MainActivity) getActivity()).setGroups(sGroups); //this is the name with the class attached
-                    if (getListView().getAdapter() == null) {
-                        GroupAdapter adapter = new GroupAdapter(
-                                getListView().getContext(),
-                                sGroups); //just the raw group name
-                        setListAdapter(adapter);
-                    }
 
-                } else {
-                    Log.e(TAG, "help" + e.getMessage());
+            ParseQuery<Group> query = new ParseQuery<Group>(ParseConstants.GROUP_OBJECT);
+            query.whereEqualTo(ParseConstants.USERS, ((MainActivity) getActivity()).getCurrentUsername());
+            query.whereEqualTo(ParseConstants.APPROVED, true);
+            query.setLimit(1000);
+            query.findInBackground(new FindCallback<Group>() {
+                @Override
+                public void done(List<Group> objects, ParseException e) {
+                    if (e == null) {
+                        mGroups = objects;
+                        groupClass = new String[objects.size()][2];
+                        sGroups = new ArrayList<String>();
+                        Log.v(TAG, objects.size() + "The size of these groups ");
+
+                        List<String> groupListNoHiphens = new ArrayList<String>();
+                        for (int i = 0; i < mGroups.size(); i++) {
+                            sGroups.add(mGroups.get(i).getGroupName() + "(" + mGroups.get(i).getNameOfClass()+")");
+                            groupClass[i][0] = mGroups.get(i).getGroupName();
+                            groupListNoHiphens.add(groupClass[i][0]);
+                            groupClass[i][1] = mGroups.get(i).getNameOfClass();
+                            Log.v(TAG, "hi");
+                        }
+                        ((MainActivity)getActivity()).setJustGroups(groupListNoHiphens);
+                        ((MainActivity) getActivity()).setGroups(sGroups); //this is the name with the class attached
+                        ((MainActivity)getActivity()).queryNotifications(); // now that sGroups is set
+                        //lets make the list view visible now:
+                        mListView.setVisibility(View.VISIBLE);
+                        progressbar.setVisibility(View.GONE);
+                        if (sGroups.isEmpty()) {
+                            mText.setVisibility(View.VISIBLE);
+                        }
+                        if (getListView().getAdapter() == null) {
+                            GroupAdapter adapter = new GroupAdapter(
+                                    getListView().getContext(),
+                                    sGroups); //just the raw group name
+                            setListAdapter(adapter);
+
+                        }
+
+                    } else {
+                        Log.e(TAG, "help" + e.getMessage());
+                    }
                 }
-            }
-        });
-
+            });
+        }
 
     }
+
 
 
     @Override
