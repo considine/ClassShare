@@ -369,7 +369,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                     group.setGroupName(tempGroupname);
                     group.setMembers(tempUsername);
                     group.setNameOfClass(tempClassname);
-                    group.setApproved(true);
+                    group.setApproved(false);
                     group.setCreator(getString(R.string.already_created_group));
                     group.saveInBackground(new SaveCallback() {
                         @Override
@@ -476,14 +476,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 mFragmentTransaction.replace(R.id.fragmentHolder, groupsByClass);
                 break;
             case(6):
-                mToolbar.setNavigationIcon(R.drawable.ic_fast_rewind_black_24dp);
-                mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        addingFragment(3);
-                    }
-                });
 
+                mToolbar.setNavigationIcon(R.drawable.theme);
                 //query unapproved groups:
                 mFragmentTransaction.replace(R.id.fragmentHolder, browseClasses);
                 break;

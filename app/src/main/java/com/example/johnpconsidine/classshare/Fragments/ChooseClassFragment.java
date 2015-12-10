@@ -38,15 +38,17 @@ public class ChooseClassFragment extends ListFragment {
     public String[] nClasses;
     protected List<ClassRoom> mClasses;
     ParseUser mCurrentUser;
+    String mCurrentUsername;
     public static final String TAG = ChooseClassFragment.class.getSimpleName();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         mCurrentUser = ParseUser.getCurrentUser();
+        mCurrentUsername = ((MainActivity) getActivity()).getCurrentUsername();
         View rootview = inflater.inflate(R.layout.fragment_choose_class, container, false);
         ParseQuery<ClassRoom> query = new ParseQuery<ClassRoom>(ParseConstants.CLASS_OBJECT);
-        query.whereEqualTo(ParseConstants.USERS, mCurrentUser.getUsername());
+        query.whereEqualTo(ParseConstants.USERNAME, mCurrentUsername);
         query.orderByAscending(ParseConstants.KEY_CREATEDAT);
         query.setLimit(1000);
         query.findInBackground(new FindCallback<ClassRoom>() {
@@ -61,6 +63,7 @@ public class ChooseClassFragment extends ListFragment {
                     for (ClassRoom user : mClasses) {
                         classes.add(user.getNameOfClass());
                     }
+                    Log.v(TAG, "LENGTH OF mCLASSES = " + mClasses.size());
                     //convert array
                     nClasses = new String[classes.size()];
                     classes.toArray(nClasses);

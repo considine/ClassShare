@@ -51,7 +51,7 @@
     <string name="add_to_group">Add to group?</string>
     <string name="already_created_group">alreadyCreated</string>
     <string name="tap_course">Tap a course to add it to your curriculum</string>
-    <string name="set_courses">Set new Courses</string>
+    <string name="set_courses">Save Courses and return</string>
     <string name="settings">Settings</string>
     <string name="menu_holder">holder</string>
     <string name="admin_sender">ClassShare</string>

@@ -33,7 +33,7 @@ public class BrowseClasses extends android.support.v4.app.ListFragment implement
     private Button mButton;
 
     private String username;
-     @Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_browse_classes, container, false);
 
@@ -48,7 +48,7 @@ public class BrowseClasses extends android.support.v4.app.ListFragment implement
     public void onResume() {
         super.onResume();
         //query all classes:
-      //  if (getView() != null) {
+        if (getView() != null) {
             mProgressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
             mButton = (Button) getView().findViewById(R.id.addClassButton);
             allClasses = new ArrayList<>();
@@ -66,6 +66,7 @@ public class BrowseClasses extends android.support.v4.app.ListFragment implement
                             classHash.add(classRoom.getNameOfClass());
                             if (classRoom.getUserName().equals(username)) {
                                 myClasses.add(classRoom.getNameOfClass());
+                                classRoom.deleteInBackground();
                             }
 
                         }
@@ -93,54 +94,14 @@ public class BrowseClasses extends android.support.v4.app.ListFragment implement
                     }
                 }
             });
-     //   }
+        }
     }
 
     private void resetCourses() {
         //resets courses, and groups
         ((MainActivity)getActivity()).setClasses(myClasses);
-        for (String classs : myClasses) {
-            Log.v ("TAG", classs + "wtf call5");
-        }
         ((MainActivity)getActivity()).setDrawer();
-        final List <String> mustAdd = new ArrayList<>();
-        //if class is on parse, but no longer Contained in myClasses
-        ParseQuery<ClassRoom> classRoomParseQuery = new ParseQuery<ClassRoom>(ParseConstants.CLASS_OBJECT);
-        classRoomParseQuery.findInBackground(new FindCallback<ClassRoom>() {
-            @Override
-            public void done(List<ClassRoom> objects, ParseException e) {
-                if (e==null) {
-                    //remove these objects from database
-                    for (ClassRoom object : objects) {
-                        if (!myClasses.contains(object.getNameOfClass()) && (object.getUserName().equals(username))) {
-                            Log.v("TAG", "DELETING");
-                            object.deleteInBackground(); //delete the objects for a user and class where the class no longer is theres
-                        }
-                        boolean temp = true;
-                        for (String singleClass : myClasses) {
-                            // if one of myclasses is in the database
-                            // in the same row as my username, then
-                            //don't worry about readding it!
-                            if ((singleClass.equals(object.getNameOfClass())) && (username.equals(object.getUserName()))) {
-                                temp = false;
-                            }
-                        }
-                        ///then it is not contained, add temp to the queu to save
-                        if (temp) {
-                            mustAdd.add(object.getNameOfClass());
-                        }
-                    }
-
-                    saveMustAdd(mustAdd);
-                }
-                else {
-                    Log.e("TAG", "There was an error resetting classses "+e.getMessage());
-                }
-            }
-        });
-
         for (String course : myClasses) {
-            Log.v("TAG", "LENGTH OF MY CLASSES "+myClasses.size());
             ClassRoom classRoom = new ClassRoom();
             classRoom.setUserName(username);
             classRoom.setClassName(course);
@@ -185,16 +146,6 @@ public class BrowseClasses extends android.support.v4.app.ListFragment implement
 
     }
 
-    private void saveMustAdd(List<String> mustAdd) {
-        for (String singleClass : mustAdd) {
-            Log.v("TAG", "WTF CALLED2");
-            ClassRoom classRoom = new ClassRoom();
-            classRoom.setClassName(singleClass);
-            classRoom.setUserName(username);
-            classRoom.saveInBackground();
-        }
-    }
-
     private void addCheckMarks() {
         int i =0;
         Log.v("TAG", "this at least got called!");
@@ -220,14 +171,14 @@ public class BrowseClasses extends android.support.v4.app.ListFragment implement
 
 
         if (getListView().isItemChecked(position)) {
-                // add friend
-                myClasses.add(allClasses.get(position));
-            } else {
-                myClasses.remove(allClasses.get(position));
-            }
+            // add friend
+            myClasses.add(allClasses.get(position));
+        } else {
+            myClasses.remove(allClasses.get(position));
+        }
 
-            //reset mainactivity classes
-            //todo store on parse
+        //reset mainactivity classes
+        //todo store on parse
     }
 
     @Override
