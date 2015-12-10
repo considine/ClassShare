@@ -42,9 +42,11 @@ public class ChooseClassFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        mCurrentUser = ParseUser.getCurrentUser();
         View rootview = inflater.inflate(R.layout.fragment_choose_class, container, false);
-        getActivity().setProgressBarIndeterminateVisibility(true);
         ParseQuery<ClassRoom> query = new ParseQuery<ClassRoom>(ParseConstants.CLASS_OBJECT);
+        query.whereEqualTo(ParseConstants.USERS, mCurrentUser.getUsername());
         query.orderByAscending(ParseConstants.KEY_CREATEDAT);
         query.setLimit(1000);
         query.findInBackground(new FindCallback<ClassRoom>() {
@@ -84,18 +86,20 @@ public class ChooseClassFragment extends ListFragment {
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }
-            };
+            }
+
+            ;
         });
+
+
+
+
+
         return rootview;
     }
     @Override
     public void onResume() {
         super.onResume();
-
-        mCurrentUser = ParseUser.getCurrentUser();
-
-
-
 
     }
 

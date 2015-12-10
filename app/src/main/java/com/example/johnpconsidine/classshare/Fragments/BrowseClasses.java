@@ -99,6 +99,9 @@ public class BrowseClasses extends android.support.v4.app.ListFragment implement
     private void resetCourses() {
         //resets courses, and groups
         ((MainActivity)getActivity()).setClasses(myClasses);
+        for (String classs : myClasses) {
+            Log.v ("TAG", classs + "wtf call5");
+        }
         ((MainActivity)getActivity()).setDrawer();
         final List <String> mustAdd = new ArrayList<>();
         //if class is on parse, but no longer Contained in myClasses
@@ -110,6 +113,7 @@ public class BrowseClasses extends android.support.v4.app.ListFragment implement
                     //remove these objects from database
                     for (ClassRoom object : objects) {
                         if (!myClasses.contains(object.getNameOfClass()) && (object.getUserName().equals(username))) {
+                            Log.v("TAG", "DELETING");
                             object.deleteInBackground(); //delete the objects for a user and class where the class no longer is theres
                         }
                         boolean temp = true;
@@ -136,6 +140,7 @@ public class BrowseClasses extends android.support.v4.app.ListFragment implement
         });
 
         for (String course : myClasses) {
+            Log.v("TAG", "LENGTH OF MY CLASSES "+myClasses.size());
             ClassRoom classRoom = new ClassRoom();
             classRoom.setUserName(username);
             classRoom.setClassName(course);
@@ -182,6 +187,7 @@ public class BrowseClasses extends android.support.v4.app.ListFragment implement
 
     private void saveMustAdd(List<String> mustAdd) {
         for (String singleClass : mustAdd) {
+            Log.v("TAG", "WTF CALLED2");
             ClassRoom classRoom = new ClassRoom();
             classRoom.setClassName(singleClass);
             classRoom.setUserName(username);

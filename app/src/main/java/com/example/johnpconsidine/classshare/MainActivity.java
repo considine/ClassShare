@@ -60,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
     public void setClasses(List<String> classes) {
+        mClasses.clear();
+        for (String classs : classes) {
+            Log.v(TAG, "WTF class:" + classs);
+        }
         mClasses = classes;
     }
 
@@ -180,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         tempList.add(objects.get(i).getString(ParseConstants.CLASS_NAME)); //ad class to mClases
 
                     }
+                    Log.v(TAG, "LENGTH OF TEMPLIST: " + tempList.size());
                     mClasses = tempList;
 
                 } else {
@@ -673,6 +678,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         //todo increment class size
                         Toast.makeText(MainActivity.this, "That course already exists, you have been added to it ", Toast.LENGTH_LONG).show();
                     }
+                    Log.v (TAG, "WTF CALLED3");
                     makeClassHelper(className);
                 }
 
@@ -688,6 +694,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     private void makeClassHelper(String className) {
+        Log.v(TAG, " WTF CALL 1");
         ClassRoom classRoom = new ClassRoom();
         classRoom.setClassName(className);
         classRoom.setUserName(ParseUser.getCurrentUser().getUsername());
