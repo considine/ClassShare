@@ -34,7 +34,7 @@ public class ParseConstants {
     public static final String RECIPIENT  = "recipient";
     public static final String SENDER = "sender";
     public static final String MESSAGE_TEXT ="message_text";
-
+    public static final String SPECIAL_MESSAGE = "class_share"; //for service messages
 
 
 

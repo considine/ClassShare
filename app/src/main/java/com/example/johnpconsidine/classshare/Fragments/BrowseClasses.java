@@ -48,7 +48,7 @@ public class BrowseClasses extends android.support.v4.app.ListFragment implement
     public void onResume() {
         super.onResume();
         //query all classes:
-        if (getView() != null) {
+      //  if (getView() != null) {
             mProgressBar = (ProgressBar) getView().findViewById(R.id.progressBar);
             mButton = (Button) getView().findViewById(R.id.addClassButton);
             allClasses = new ArrayList<>();
@@ -66,7 +66,6 @@ public class BrowseClasses extends android.support.v4.app.ListFragment implement
                             classHash.add(classRoom.getNameOfClass());
                             if (classRoom.getUserName().equals(username)) {
                                 myClasses.add(classRoom.getNameOfClass());
-                                classRoom.deleteInBackground();
                             }
 
                         }
@@ -94,13 +93,48 @@ public class BrowseClasses extends android.support.v4.app.ListFragment implement
                     }
                 }
             });
-        }
+     //   }
     }
 
     private void resetCourses() {
         //resets courses, and groups
         ((MainActivity)getActivity()).setClasses(myClasses);
         ((MainActivity)getActivity()).setDrawer();
+        final List <String> mustAdd = new ArrayList<>();
+        //if class is on parse, but no longer Contained in myClasses
+        ParseQuery<ClassRoom> classRoomParseQuery = new ParseQuery<ClassRoom>(ParseConstants.CLASS_OBJECT);
+        classRoomParseQuery.findInBackground(new FindCallback<ClassRoom>() {
+            @Override
+            public void done(List<ClassRoom> objects, ParseException e) {
+                if (e==null) {
+                    //remove these objects from database
+                    for (ClassRoom object : objects) {
+                        if (!myClasses.contains(object.getNameOfClass()) && (object.getUserName().equals(username))) {
+                            object.deleteInBackground(); //delete the objects for a user and class where the class no longer is theres
+                        }
+                        boolean temp = true;
+                        for (String singleClass : myClasses) {
+                            // if one of myclasses is in the database
+                            // in the same row as my username, then
+                            //don't worry about readding it!
+                            if ((singleClass.equals(object.getNameOfClass())) && (username.equals(object.getUserName()))) {
+                                temp = false;
+                            }
+                        }
+                        ///then it is not contained, add temp to the queu to save
+                        if (temp) {
+                            mustAdd.add(object.getNameOfClass());
+                        }
+                    }
+
+                    saveMustAdd(mustAdd);
+                }
+                else {
+                    Log.e("TAG", "There was an error resetting classses "+e.getMessage());
+                }
+            }
+        });
+
         for (String course : myClasses) {
             ClassRoom classRoom = new ClassRoom();
             classRoom.setUserName(username);
@@ -144,6 +178,15 @@ public class BrowseClasses extends android.support.v4.app.ListFragment implement
 
 
 
+    }
+
+    private void saveMustAdd(List<String> mustAdd) {
+        for (String singleClass : mustAdd) {
+            ClassRoom classRoom = new ClassRoom();
+            classRoom.setClassName(singleClass);
+            classRoom.setUserName(username);
+            classRoom.saveInBackground();
+        }
     }
 
     private void addCheckMarks() {

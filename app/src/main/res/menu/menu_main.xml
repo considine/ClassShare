@@ -3,10 +3,19 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:context=
           ".MenuExampleActivity" >
-      <item
-          android:id="@+id/createGroup"
-          app:showAsAction="ifRoom"
-          android:title=""
-          android:icon="@drawable/ic_plus_one_black_24dp"/>
+    <item
+        android:title="@string/menu_holder"
+        android:id="@+id/empty"
+        android:icon="@drawable/ic_settings_black_24dp"
+        android:orderInCategory="101"
+        app:showAsAction="always">
+         <menu>
+             <item app:showAsAction="ifRoom"
+                   android:id="@+id/leaveGroup"
+                   android:title="Leave Group"
+                   android:icon="@drawable/ic_flight_takeoff_black_24dp" />
+
+         </menu>
+    </item>
 
 </menu>

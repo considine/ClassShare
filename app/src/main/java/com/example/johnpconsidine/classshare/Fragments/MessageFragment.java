@@ -74,15 +74,8 @@ public class MessageFragment extends ListFragment implements View.OnClickListene
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ImageView mainImage = ((MainActivity)getActivity()).getNotifications();
-        mainImage.setImageResource(R.drawable.ic_settings_black_24dp);
-        mainImage.setVisibility(View.VISIBLE);
-        mainImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
+
 
 
 
@@ -157,8 +150,8 @@ public class MessageFragment extends ListFragment implements View.OnClickListene
                 message.setSenderName(((MainActivity) getActivity()).getCurrentUsername());
                 //need to get a recipient // wil make a main activity variable to store current group members
                 message.setGroupName(((MainActivity) getActivity()).getCurrentGroup());
-                message.setRecipients(((MainActivity) getActivity()).getCurrentGroupMembers());
                 message.setMessageClass(((MainActivity) getActivity()).getCurrentClass());
+                message.setMessageSpecial(false); //only a special message if someone leaves the group
                 message.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {

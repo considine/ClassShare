@@ -61,7 +61,7 @@ public class GroupsByClass extends ListFragment implements AdapterView.OnClickLi
             public void done(List<Group> objects, ParseException e) {
                 if (e == null) {
 
-                   HashSet<String> nGroups = new HashSet<String>();
+                    HashSet<String> nGroups = new HashSet<String>();
                     //inflate array adapter with appropriate infformation
                     aUsers = new ArrayList<String>();
 

@@ -48,6 +48,14 @@ public class MessageAdapter extends ArrayAdapter<String>{
                 params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 holder.message.setBackgroundResource(R.drawable.blue);
             }
+
+            else if (mInitials.get(position).equals(mContext.getString(R.string.admin_sender))) {
+                holder.initials.setVisibility(View.INVISIBLE);
+                holder.message.setGravity(Gravity.CENTER_HORIZONTAL);
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)holder.message.getLayoutParams();
+                params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                holder.message.setBackgroundResource(R.drawable.gray);
+            }
             else {
 
                 holder.initials.setVisibility(View.VISIBLE);

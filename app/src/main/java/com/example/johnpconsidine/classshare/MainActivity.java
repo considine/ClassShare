@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -30,6 +31,7 @@ import com.example.johnpconsidine.classshare.Fragments.GroupsFragment;
 import com.example.johnpconsidine.classshare.Fragments.MessageFragment;
 import com.example.johnpconsidine.classshare.ParseClasses.ClassRoom;
 import com.example.johnpconsidine.classshare.ParseClasses.Group;
+import com.example.johnpconsidine.classshare.ParseClasses.Message;
 import com.example.johnpconsidine.classshare.ParseClasses.ParseConstants;
 import com.parse.FindCallback;
 import com.parse.ParseAnalytics;
@@ -192,10 +194,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
 
         //set up layout
+       // mToolbar.setMenu();
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mToolbar.setNavigationIcon(R.mipmap.ic_drawer); //todo change
         mToolbar.setTitle(""); //we'll use the preset title
-        setSupportActionBar(mToolbar);
+        groupMenuOn();
+
+        //setSupportActionBar(mToolbar);
 
         // mItems = getResources().getStringArray(R.array.menu_items);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
@@ -228,7 +233,70 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         addingFragment(0);
 
     }
+    public void groupMenuOn () {
+        mToolbar.inflateMenu(R.menu.menu_main);
+        mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.leaveGroup) {
+                    leaveGroup();
+                }
 
+
+                return false;
+            }
+        });
+
+    }
+
+    private void leaveGroup() {
+        //query currentgroup, and this user (current user) and remove them from the group
+        ParseQuery<Group> groupParseQuery = new ParseQuery<Group>(ParseConstants.GROUP_OBJECT);
+        groupParseQuery.whereEqualTo(ParseConstants.USERS, currentUsername);
+        groupParseQuery.whereEqualTo(ParseConstants.GROUP_NAME, currentGroup);
+        groupParseQuery.findInBackground(new FindCallback<Group>() {
+            @Override
+            public void done(List<Group> objects, ParseException e) {
+                if (e == null) {
+                    //no issues
+                    for (Group object : objects) {
+                        mGroups.remove(object.getGroupName());
+                        object.deleteInBackground(); //leave the group
+                        //todo remove from current group
+
+                    }
+
+
+                } else {
+                    Log.e(TAG, "Error leaving the group ");
+
+                }
+            }
+        });
+
+        Message message = new Message();
+        message.setSenderName(getString(R.string.admin_sender));
+        message.setMessageSpecial(true);
+        message.setMessageText(currentUsername + " has left this group ");
+        message.setGroupName(currentGroup);
+        message.setMessageClass(getCurrentClass());
+        message.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e==null) {
+                    addingFragment(3);
+                }
+                else {
+                    Toast.makeText(MainActivity.this, "Error leaving group", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    public void groupMenuOff() {
+        mToolbar.getMenu().clear();
+    }
     public void queryNotifications() {
         Log.v(TAG, "code4" + mGroups.size());
 
@@ -285,6 +353,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    Message message = new Message();
+                    message.setSenderName(getString(R.string.admin_sender));
+                    message.setGroupName(tempGroupname);
+                    message.setMessageText(tempUsername + " has joined this group");
+                    message.setMessageSpecial(true);
+                    message.setMessageClass(tempClassname);
+                    message.saveInBackground(); //to nofity the group that someone has joined
                     Group group = new Group();
                     group.setGroupName(tempGroupname);
                     group.setMembers(tempUsername);
@@ -316,7 +391,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         //make sure the keyboard is down
         hideSoftKeyboard(this);
         //remove image logo
-
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawers();
+        }
+        if (mToolbar != null) {
+            groupMenuOff();
+        }
         android.support.v4.app.FragmentManager mFragmentManager = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
         GroupsFragment mGroupsFragment = new GroupsFragment();
@@ -374,6 +454,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         addingFragment(3);
                     }
                 });
+                groupMenuOn();
                 mFragmentTransaction.replace(R.id.fragmentHolder, mMessageFragment);
 
                 break;
@@ -400,6 +481,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                 //query unapproved groups:
                 mFragmentTransaction.replace(R.id.fragmentHolder, browseClasses);
+                break;
         }
         mFragmentTransaction.commit();
 
@@ -515,7 +597,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             errorCreate(dialog);
                         }
                     }
-                    for (int i = 4; i < className.length(); i++) {
+                    for (int i = 6; i < className.length(); i++) {
                         char ch = className.toCharArray()[i];
                         if (ch >= '0' && ch <= '9') {
                             //this is valid
@@ -523,7 +605,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             errorCreate(dialog);
                         }
                     }
-                    if (className.toCharArray()[3] != '-') {
+                    if (className.toCharArray()[3] != '-' && className.toCharArray()[4] != '-') {
                         //this wont fly
                         errorCreate(dialog);
                     } else {
@@ -572,7 +654,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         //see if you're in the class:
         if (mItems.contains(className)) {
-            Toast.makeText(MainActivity.this, "The class exists", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "You are already in course " + className, Toast.LENGTH_LONG).show();
             return;
 
         }
@@ -589,7 +671,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                     } else {
                         //todo increment class size
-
+                        Toast.makeText(MainActivity.this, "That course already exists, you have been added to it ", Toast.LENGTH_LONG).show();
                     }
                     makeClassHelper(className);
                 }
@@ -639,5 +721,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             toolbarText.setText(newName);
         }
     }
+
 
 }

@@ -66,4 +66,5 @@
         android:dividerHeight="0.1dp"
         android:background="@drawable/bg_gradient"
         android:textColor="@color/white"/>
+
 </android.support.v4.widget.DrawerLayout>
